@@ -1,0 +1,23 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/created-by: application-service
+    app.kubernetes.io/instance: frontend
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: graphtuitous
+  name: frontend
+  namespace: rockbroth
+spec:
+  port:
+    targetPort: 8080
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: frontend
+    weight: 100
+status: {}
