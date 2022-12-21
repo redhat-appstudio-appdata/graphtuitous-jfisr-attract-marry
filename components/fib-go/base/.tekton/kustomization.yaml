@@ -1,0 +1,4 @@
+resources:
+- build-webhook-route.yaml
+- event-listener.yaml
+- trigger-template.yaml
