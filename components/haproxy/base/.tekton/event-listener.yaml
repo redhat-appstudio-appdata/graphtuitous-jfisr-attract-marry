@@ -1,0 +1,26 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  annotations:
+    appstudio.openshift.io/application: graphtuitous
+    appstudio.openshift.io/component: haproxy
+    build.appstudio.openshift.io/build: "true"
+    build.appstudio.openshift.io/type: build
+    build.appstudio.openshift.io/version: "0.1"
+    pipelines.appstudio.openshift.io/type: build
+  creationTimestamp: null
+  name: haproxy
+  namespace: rockbroth
+spec:
+  namespaceSelector: {}
+  resources: {}
+  serviceAccountName: pipeline
+  triggers:
+  - bindings:
+    - kind: ClusterTriggerBinding
+      ref: github-push
+    template:
+      ref: haproxy
+status:
+  configuration:
+    generatedName: ""

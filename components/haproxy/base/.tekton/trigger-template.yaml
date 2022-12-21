@@ -1,0 +1,63 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  creationTimestamp: null
+  name: haproxy
+  namespace: rockbroth
+spec:
+  params:
+  - name: git-revision
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      annotations:
+        appstudio.openshift.io/application: graphtuitous
+        appstudio.openshift.io/component: haproxy
+        build.appstudio.openshift.io/build: "true"
+        build.appstudio.openshift.io/type: build
+        build.appstudio.openshift.io/version: "0.1"
+        pipelines.appstudio.openshift.io/type: build
+      creationTimestamp: null
+      generateName: haproxy-
+      labels:
+        appstudio.openshift.io/application: graphtuitous
+        appstudio.openshift.io/component: haproxy
+        build.appstudio.openshift.io/build: "true"
+        build.appstudio.openshift.io/type: build
+        build.appstudio.openshift.io/version: "0.1"
+        pipelines.appstudio.openshift.io/type: build
+      namespace: rockbroth
+    spec:
+      params:
+      - name: git-url
+        value: https://github.com/jduimovich/graphtuitous
+      - name: output-image
+        value: quay.io/jduimovich0/haproxy:latest-$(tt.params.git-revision)
+      - name: dockerfile
+        value: services/haproxy/Dockerfile
+      - name: path-context
+        value: services/haproxy
+      pipelineRef:
+        bundle: quay.io/redhat-appstudio/build-templates-bundle:13f5d9c921b3f727684a00084037f673a0dc4273
+        name: docker-build
+      podTemplate:
+        imagePullSecrets:
+        - name: redhat-appstudio-registry-pull-secret
+      workspaces:
+      - name: workspace
+        volumeClaimTemplate:
+          metadata:
+            creationTimestamp: null
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 1Gi
+          status: {}
+      - name: registry-auth
+        secret:
+          secretName: redhat-appstudio-registry-pull-secret
+    status: {}
+status: {}
