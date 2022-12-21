@@ -1,0 +1,23 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/created-by: application-service
+    app.kubernetes.io/instance: fib-node
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: fib-node
+    app.kubernetes.io/part-of: graphtuitous
+  name: fib-node
+  namespace: rockbroth
+spec:
+  port:
+    targetPort: 8080
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: fib-node
+    weight: 100
+status: {}
